@@ -22,6 +22,7 @@ if (-not $COMMIT_MESSAGE -or -not $TAG) {
 }
 
 # Execute Git commands
+git pull origin main
 git add .
 git commit -m $COMMIT_MESSAGE
 git branch -M main
