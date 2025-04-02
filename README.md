@@ -25,15 +25,17 @@
 >Experimental_R4.genes.results
 
 **Output**: Single gene counts matrix text file
-> Filename: GeneCountMatrix.csv
+> Filename: GeneCountMatrix_Original.csv
 >
 > Output CSV file structure
 > 
-> "gene_id","Control_R1","Control_R2","Control_R3","Control_R4","Experimental_R1","Experimental_R2","Experimental_R3","Experimental_R4"
+> "gene_id","gene_symbol","Control_R1","Control_R2","Control_R3","Control_R4","Experimental_R1","Experimental_R2","Experimental_R3","Experimental_R4"
 > 
 > "gene_id": Ensembl ID
-> 
-> Columns 2-9: "expected_count" column from respective input files
+>
+> "gene_symbol": Gene symbols respective to Ensembl ID
+>
+> Columns 3-10: "expected_count" column from respective input files
 
 ### **Step 2**
 
