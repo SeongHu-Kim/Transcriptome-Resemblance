@@ -158,7 +158,7 @@ pca_plot <- ggplot(pca_data, aes(x = PC1, y = PC2, color = condition, label = na
 print(pca_plot)
 # --- NEW ---
 # Export PCA figure to public directory
-pca_figure_public_filename <- file.path(public_output_dir, "Outlier_PCA.png")
+pca_figure_public_filename <- file.path(public_output_dir, "Outlier_PCA.jpg")
 ggsave(pca_figure_public_filename, plot = pca_plot, width = 8, height = 6)
 cat(paste("PCA plot saved to public directory:", pca_figure_public_filename, "\n"))
 # --- END NEW ---
@@ -195,7 +195,7 @@ colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255)
 
 # --- NEW ---
 # Define filename for the heatmap plot
-dist_heatmap_public_filename <- file.path(public_output_dir, "Outlier_Heatmap_Euclidean_Distance.png")
+dist_heatmap_public_filename <- file.path(public_output_dir, "Outlier_Heatmap_Euclidean_Distance.jpg")
 # --- END NEW ---
 
 # Plot heatmap of sample distances
@@ -250,7 +250,7 @@ cat(paste("Sample correlation matrix also saved to public directory:", cor_matri
 
 # --- NEW ---
 # Define filename for the correlation heatmap plot
-cor_heatmap_public_filename <- file.path(public_output_dir, "Outlier_Heatmap_Pearson_Correlation.png")
+cor_heatmap_public_filename <- file.path(public_output_dir, "Outlier_Heatmap_Pearson_Correlation.jpg")
 # --- END NEW ---
 
 # Plot heatmap of sample correlations
@@ -314,7 +314,7 @@ dist_barplot <- ggplot(avg_dist_df, aes(x = reorder(sample, avg_dist), y = avg_d
 print(dist_barplot)
 # --- NEW ---
 # Export Euclidean distance bar plot figure to public directory
-dist_barplot_public_filename <- file.path(public_output_dir, "Outlier_Bar_Euclidean_Distance.png")
+dist_barplot_public_filename <- file.path(public_output_dir, "Outlier_Bar_Euclidean_Distance.jpg")
 ggsave(dist_barplot_public_filename, plot = dist_barplot, width = 7, height = 6)
 cat(paste("Average Euclidean distance bar plot saved to public directory:", dist_barplot_public_filename, "\n"))
 # --- END NEW ---
