@@ -1,12 +1,6 @@
 # --- 0. SETUP OUTPUT DIRECTORY ---
 # Create a directory to store the output tables if it doesn't exist
-output_dir <- "output_tables"
-if (!dir.exists(output_dir)) {
-  dir.create(output_dir)
-  message(paste("Created directory:", output_dir))
-} else {
-  message(paste("Output directory", output_dir, "already exists."))
-}
+
 
 # Create a directory to store the public output figures and tables if it doesn't exist
 public_output_dir <- "../public" # Define the public output directory path
@@ -136,9 +130,7 @@ percentVar <- round(100 * attr(pca_data, "percentVar"))
 # --- 5.1 EXTRACT: PCA DATA ---
 cat("\n--- PCA Data Table ---\n")
 print(pca_data)
-pca_data_filename <- file.path(output_dir, "pca_coordinates.csv")
-write.csv(pca_data, pca_data_filename, row.names = TRUE) # Save full table
-cat(paste("PCA coordinates saved to:", pca_data_filename, "\n"))
+
 # --- NEW ---
 # Export PCA table to public directory
 pca_data_public_filename <- file.path(public_output_dir, "Outlier_PCA.csv")
@@ -180,9 +172,7 @@ sample_dist_matrix <- as.matrix(sample_dists)
 # --- 5.2 EXTRACT: SAMPLE DISTANCE MATRIX ---
 cat("\n--- Sample Distance Matrix ---\n")
 print(round(sample_dist_matrix, 2)) # Print rounded matrix for preview
-dist_matrix_filename <- file.path(output_dir, "sample_distance_matrix.csv")
-write.csv(sample_dist_matrix, dist_matrix_filename, row.names = TRUE)
-cat(paste("Sample distance matrix saved to:", dist_matrix_filename, "\n"))
+
 # --- NEW ---
 # Export Euclidean distance table to public directory
 dist_matrix_public_filename <- file.path(public_output_dir, "Outlier_Heatmap_Euclidean_Distance.csv")
@@ -238,9 +228,7 @@ sample_cor <- cor(assay(vsd), method = "pearson")
 # --- 6.1 EXTRACT: SAMPLE CORRELATION MATRIX ---
 cat("\n--- Sample Correlation Matrix ---\n")
 print(round(sample_cor, 3)) # Print rounded matrix for preview
-cor_matrix_filename <- file.path(output_dir, "sample_correlation_matrix.csv")
-write.csv(sample_cor, cor_matrix_filename, row.names = TRUE)
-cat(paste("Sample correlation matrix saved to:", cor_matrix_filename, "\n"))
+
 # --- NEW ---
 # Export Pearson correlation table to public directory
 cor_matrix_public_filename <- file.path(public_output_dir, "Outlier_Heatmap_Pearson_Correlation.csv")
@@ -290,10 +278,7 @@ avg_dist_df <- merge(avg_dist_df, sample_info, by.x="sample", by.y="row.names") 
 # --- 6.2 EXTRACT: AVERAGE SAMPLE DISTANCE DATA ---
 cat("\n--- Average Sample Distance Table ---\n")
 print(avg_dist_df) # Print the data frame
-avg_dist_filename <- file.path(output_dir, "average_sample_distances.csv")
-# Save without R's default row numbers, as sample ID is already a column
-write.csv(avg_dist_df, avg_dist_filename, row.names = FALSE)
-cat(paste("Average sample distance data saved to:", avg_dist_filename, "\n"))
+
 # --- NEW ---
 # Export average distance table to public directory
 avg_dist_public_filename <- file.path(public_output_dir, "Outlier_Bar_Euclidean_Distance.csv")
