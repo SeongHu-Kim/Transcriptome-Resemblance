@@ -43,6 +43,16 @@
 
 **Purpose**: Analyze each individual samples and assess whether a sample is an outlier to be removed or not.
 
-**Input**: GeneCountMatrix.csv from step 1
+**Input**: GeneCountMatrix_Original.csv from step 1
 
 **Output**: PCA plot / Heatmap with batch effect visualization / Indication of outlier samples
+
+### **[Optional] Step 2.5**
+
+**Filename**: N/A
+
+**Purpose**: Manually remove outlier samples from GeneCountMatrix_Original.csv
+
+**Input**: GeneCountMatrix_Original.csv from step 1
+
+**Output**: GeneCountMatrix_filtered.csv
