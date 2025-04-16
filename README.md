@@ -100,3 +100,12 @@
 >
 >> Idential to GeneCountMatrix_Original.csv from step 1 (GeneCountMatrix_filtered.csv from step 2.5 if some samples were dropped)
 
+### **[Optional] Step 4A**
+
+**Filename**: Volcano_Plot.R
+
+**Purpose**: Create a Volcano plot based on the DESeq2 results
+
+**Input**: DESeq2_results.csv from step 3
+
+**Output**: volcano_plot.jpg
