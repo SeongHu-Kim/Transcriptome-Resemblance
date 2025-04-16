@@ -147,11 +147,11 @@ print(paste("Downregulated DEGs (log2FC <", round(lfc_threshold_down, 3), ", pad
 print(paste("Number of downregulated DEGs:", nrow(down_degs)))
 
 # --- Optional: Save Normalized Counts ---
-# normalized_counts <- counts(dds, normalized=TRUE)
-# normalized_counts_df <- as.data.frame(normalized_counts) %>%
-#   rownames_to_column(var = "gene_id") %>%
-#   merge(gene_symbols_df, by = "gene_id") %>%
-#   select(gene_id, gene_symbol, everything()) # Reorder columns
-# write.csv(normalized_counts_df, file = "../public/DESeq2_normalized_counts.csv", row.names = FALSE)
-# print("Normalized counts saved to ../public/DESeq2_normalized_counts.csv")
+normalized_counts <- counts(dds, normalized=TRUE)
+normalized_counts_df <- as.data.frame(normalized_counts) %>%
+ rownames_to_column(var = "gene_id") %>%
+ merge(gene_symbols_df, by = "gene_id") %>%
+ select(gene_id, gene_symbol, everything()) # Reorder columns
+write.csv(normalized_counts_df, file = "../public/DESeq2_normalized_counts.csv", row.names = FALSE)
+print("Normalized counts saved to ../public/DESeq2_normalized_counts.csv")
 
