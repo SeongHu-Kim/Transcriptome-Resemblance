@@ -49,9 +49,9 @@
 
 ### **[Optional] Step 2.5**
 
-**Filename**: N/A
+**Filename**: Remove_Outlier_Samples.R
 
-**Purpose**: Manually remove outlier samples from GeneCountMatrix_Original.csv
+**Purpose**: Remove outlier samples from GeneCountMatrix_Original.csv
 
 **Input**: GeneCountMatrix_Original.csv from step 1
 
