@@ -56,3 +56,35 @@
 **Input**: GeneCountMatrix_Original.csv from step 1
 
 **Output**: GeneCountMatrix_filtered.csv
+
+### **Step 3**
+
+**Filename**: Differential_Expression_Analysis.R
+
+**Purpose**: Conduct differential expression analysis
+
+**Input**: GeneCountMatrix_Original.csv from step 1 (GeneCountMatrix_filtered.csv from step 2.5 if some samples were dropped)
+
+**Output**: DESeq2 based Differential expression analysis results
+> Filename: DESeq2_results.csv
+>
+> Output CSV file structure
+> 
+> "gene_id","gene_symbol","baseMean","log2FoldChange","lfcSE","stat","pvalue","padj"
+> 
+> "gene_id": Ensembl ID
+>
+> "gene_symbol": Gene symbols respective to Ensembl ID
+>
+> "baseMean": The average normalized count for the gene across all samples (both Control and Experimental)
+>
+> "log2FoldChange": The estimated change in gene expression between the two groups ('Experimental' vs 'Control')
+>
+> "lfcSE": Log Fold Change Standard Error. A smaller lfcSE indicates a more precise estimate of the fold change
+>
+> "stat": The Wald statistic. Larger absolute values of the stat suggest stronger evidence against the null hypothesis
+>
+> "pvalue": The raw p-value obtained from the Wald test. Lower p-values suggest stronger evidence against the null hypothesis
+>
+> "padj": The adjusted p-value (also known as the False Discovery Rate or FDR). Genes with a low padj are considered significantly differentially expressed between the conditions
+
