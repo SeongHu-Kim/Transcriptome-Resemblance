@@ -66,19 +66,22 @@
 **Input**: GeneCountMatrix_Original.csv from step 1 (GeneCountMatrix_filtered.csv from step 2.5 if some samples were dropped)
 
 **Output**: DESeq2 based Differential expression analysis results
-> Filename: DESeq2_results.csv, UpDEG.csv, DownDEG.csv
+> Filename: DESeq2_results.csv, UpDEG.csv, DownDEG.csv, DESeq2_normalized_counts.csv
 > 
 >> DESeq2_results.csv: Contains all genes
 >> 
 >> UpDEG.csv: Contains genes with 1.5 fold upregulation and with padj < 0.05
 >> 
 >> DownDEG.csv: Contains genes with 1.5 fold downregulation and with padj < 0.05
+>>
+>> DESeq2_normalized_counts.csv: Contains DESeq2 normalized counts for all samples
 >> 
-> Output CSV file structure (identical for all three csv files)
+> Output CSV file structure (DESeq2_results.csv, UpDEG.csv, DownDEG.csv)
 >> 
->>"gene_id","gene_symbol","baseMean","log2FoldChange","lfcSE","stat","pvalue","padj"
+>> "gene_id","gene_symbol","baseMean","log2FoldChange","lfcSE","stat","pvalue","padj"
 >>
 >> "gene_id": Ensembl ID
+>> 
 >> "gene_symbol": Gene symbols respective to Ensembl ID
 >>
 >> "baseMean": The average normalized count for the gene across all samples (both Control and Experimental)
@@ -92,4 +95,8 @@
 >> "pvalue": The raw p-value obtained from the Wald test. Lower p-values suggest stronger evidence against the null hypothesis
 >>
 >> "padj": The adjusted p-value (also known as the False Discovery Rate or FDR). Genes with a low padj are considered significantly differentially expressed between the conditions
+>>
+> Output CSV file structure (DESeq2_normalized_counts.csv)
+>
+>> Idential to GeneCountMatrix_Original.csv from step 1 (GeneCountMatrix_filtered.csv from step 2.5 if some samples were dropped)
 
