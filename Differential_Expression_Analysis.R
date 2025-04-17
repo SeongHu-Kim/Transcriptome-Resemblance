@@ -108,7 +108,7 @@ print(paste("DESeq2 full results successfully saved to:", output_file))
 # --- 7. Filter and Save Upregulated DEGs ---
 print("Filtering for upregulated genes...")
 # Define thresholds
-lfc_threshold_up <- 0.58496 # log2(1.5)
+lfc_threshold_up <- 1 # log2(2)
 padj_threshold <- 0.05
 
 # Filter for upregulated genes (log2FC > threshold and padj < threshold)
@@ -129,7 +129,7 @@ print(paste("Number of upregulated DEGs:", nrow(up_degs)))
 # --- 8. Filter and Save Downregulated DEGs ---
 print("Filtering for downregulated genes...")
 # Define threshold (negative for downregulation)
-lfc_threshold_down <- -0.58496 # log2(1/1.5)
+lfc_threshold_down <- -1 # log2(1/2)
 
 # Filter for downregulated genes (log2FC < threshold and padj < threshold)
 # Also remove rows where padj or log2FoldChange is NA
