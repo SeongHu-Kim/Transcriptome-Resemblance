@@ -129,3 +129,28 @@
 >> "gene_id": Ensembl ID
 >>
 >> Columns 2-45: raw gene counts column from respective input files
+>
+### **Step 6**
+
+**Filename**: Combine_CountsMatrix.R
+
+**Purpose**: Merge personal and public gene counts matrices
+
+**Input**: Personal and public gene counts matrices
+> Personal gene counts matrix: GeneCountMatrix_Original.csv from step 1 (GeneCountMatrix_filtered.csv from step 2.5 if some samples were dropped)
+> 
+> Public gene counts matrix: GeneCountMatrix_GSE97263.csv from step 5
+
+**Output**: Single combined gene counts matrix text file
+> Filename: GeneCountMatrix_Combined.csv
+>
+> Output CSV file structure
+> 
+>> "gene_id","gene_symbol","Control_R1","Control_R3",...
+>> 
+>> "gene_id": Ensembl ID
+>>
+>> "gene_symbol": Gene symbols respective to Ensembl ID
+>>
+>> Columns 3-52: raw gene counts column from respective input files
+
