@@ -29,13 +29,13 @@
 >
 > Output CSV file structure
 > 
-> "gene_id","gene_symbol","Control_R1","Control_R2","Control_R3","Control_R4","Experimental_R1","Experimental_R2","Experimental_R3","Experimental_R4"
-> 
-> "gene_id": Ensembl ID
->
-> "gene_symbol": Gene symbols respective to Ensembl ID
->
-> Columns 3-10: "expected_count" column from respective input files
+>> "gene_id","gene_symbol","Control_R1","Control_R2","Control_R3","Control_R4","Experimental_R1","Experimental_R2","Experimental_R3","Experimental_R4"
+>> 
+>> "gene_id": Ensembl ID
+>>
+>> "gene_symbol": Gene symbols respective to Ensembl ID
+>>
+>> Columns 3-10: "expected_count" column from respective input files
 
 ### **Step 2**
 
@@ -109,3 +109,23 @@
 **Input**: DESeq2_results.csv from step 3
 
 **Output**: volcano_plot.jpg
+
+### **Step 5**
+
+**Filename**: Public_Dataset_to_CountsMatrix.R
+
+**Purpose**: Merge multiple gene counts data into a single CSV file
+
+**Input**: individual raw gene counts .txt files
+> Using public available dataset GSE97263
+
+**Output**: Single gene counts matrix text file
+> Filename: GeneCountMatrix_GSE97263.csv
+>
+> Output CSV file structure
+> 
+>> "gene_id","SLE active_CDR-2","SLE active_CDR-6","SLE active_CDR-20",...
+>> 
+>> "gene_id": Ensembl ID
+>>
+>> Columns 2-45: raw gene counts column from respective input files
