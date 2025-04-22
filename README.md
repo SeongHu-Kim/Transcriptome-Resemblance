@@ -118,7 +118,11 @@
 
 **Input**: UpDEG.csv, DownDEG.csv from step 3
 
-**Output**: chromosome_distribution_plot.jpg
+**Output**: chromosome_distribution_plot.jpg, UpDEG_chr.csv, DownDEG_chr.csv
+>
+> UpDEG_chr.csv and DownDEG_chr.csv
+>
+>> Includes additional "chr" column indicating chromosome number respective of gene_id
 
 ### **Step 5**
 
