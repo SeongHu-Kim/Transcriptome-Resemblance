@@ -23,6 +23,18 @@ library(tidyr) # For complete() function
 up_file <- "../public/UpDEG.csv"
 down_file <- "../public/DownDEG.csv"
 output_plot_file <- "../public/chromosome_distribution_plot.jpg"
+# Define output file paths for annotated lists
+output_up_chr_file <- "../public/UpDEG_chr.csv"
+output_down_chr_file <- "../public/DownDEG_chr.csv"
+# Define output directory
+output_dir <- "../public/"
+
+# --- 2b. Create Output Directory ---
+# Create output directory if it doesn't exist (do this early)
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)
+  message("Created output directory: ", output_dir)
+}
 
 # --- 3. Import DEG Files ---
 message("Importing DEG files...")
@@ -45,7 +57,26 @@ all_gene_ids <- unique(c(up_deg$ensembl_gene_id_base, down_deg$ensembl_gene_id_b
 
 # Connect to Ensembl (uses the current version by default)
 # Using https is recommended
-ensembl_mart <- useMart(biomart = "ENSEMBL_MART_ENSEMBL", host = "https://www.ensembl.org")
+# Retry mechanism basic example (could be more sophisticated)
+ensembl_mart <- NULL
+attempt <- 1
+max_attempts <- 3
+while(is.null(ensembl_mart) && attempt <= max_attempts) {
+  try({
+    ensembl_mart <- useMart(biomart = "ENSEMBL_MART_ENSEMBL", host = "https://www.ensembl.org")
+  }, silent = TRUE) # silent=TRUE suppresses the default error message
+  if (is.null(ensembl_mart)) {
+    message("Attempt ", attempt, " to connect to Ensembl failed. Retrying in 5 seconds...")
+    Sys.sleep(5)
+    attempt <- attempt + 1
+  }
+}
+if (is.null(ensembl_mart)) {
+  stop("Failed to connect to Ensembl after ", max_attempts, " attempts. Check connection or Ensembl status.")
+} else {
+  message("Successfully connected to Ensembl mart.")
+}
+
 human_dataset <- useDataset(dataset = "hsapiens_gene_ensembl", mart = ensembl_mart)
 
 # Fetch chromosome information for the genes
@@ -71,39 +102,66 @@ message("Processing gene counts per chromosome...")
 up_deg_annotated <- left_join(up_deg, gene_annotations, by = c("ensembl_gene_id_base" = "ensembl_gene_id"))
 down_deg_annotated <- left_join(down_deg, gene_annotations, by = c("ensembl_gene_id_base" = "ensembl_gene_id"))
 
+# --- 5b. Export Annotated DEG Lists ---  <<< SECTION MODIFIED >>>
+message("Exporting annotated DEG lists with chromosome information...")
+
+# Select desired columns and arrange them for clarity
+# Keep original columns + chromosome_name, remove the temporary base ID column
+# Use dplyr::select to avoid namespace conflicts
+up_deg_to_save <- up_deg_annotated %>%
+  dplyr::select(gene_id, gene_symbol, chromosome_name, baseMean, log2FoldChange, lfcSE, stat, pvalue, padj)
+
+down_deg_to_save <- down_deg_annotated %>%
+  dplyr::select(gene_id, gene_symbol, chromosome_name, baseMean, log2FoldChange, lfcSE, stat, pvalue, padj)
+
+# Write the annotated data frames to new CSV files
+write_csv(up_deg_to_save, output_up_chr_file)
+write_csv(down_deg_to_save, output_down_chr_file)
+
+message("Annotated DEG lists saved to:")
+message("  ", output_up_chr_file)
+message("  ", output_down_chr_file)
+# --- End of Modified Section ---
+
 # Define standard chromosomes (adjust if you need others like MT)
 valid_chromosomes <- c(as.character(1:22), "X", "Y")
-chromosome_order <- factor(valid_chromosomes, levels = valid_chromosomes) # Ensure correct order
+# Ensure correct order, making it a factor *before* using complete
+chromosome_order <- factor(valid_chromosomes, levels = valid_chromosomes)
 
 # Count Up-regulated genes per valid chromosome
 up_counts <- up_deg_annotated %>%
   filter(chromosome_name %in% valid_chromosomes) %>%
-  count(chromosome_name, name = "count") %>%
+  mutate(chromosome_name = factor(chromosome_name, levels = levels(chromosome_order))) %>% # Ensure factor levels before count
+  count(chromosome_name, name = "count", .drop = FALSE) %>% # use .drop=FALSE with count if needed
   mutate(regulation = "Up")
 
 # Count Down-regulated genes per valid chromosome
 # Make counts negative for plotting downwards
 down_counts <- down_deg_annotated %>%
   filter(chromosome_name %in% valid_chromosomes) %>%
-  count(chromosome_name, name = "count") %>%
+  mutate(chromosome_name = factor(chromosome_name, levels = levels(chromosome_order))) %>% # Ensure factor levels before count
+  count(chromosome_name, name = "count", .drop = FALSE) %>% # use .drop=FALSE with count if needed
   mutate(regulation = "Down", count = -count) # Negative count
 
 # Combine counts
 all_counts <- bind_rows(up_counts, down_counts)
 
 # Ensure all chromosomes are present for both Up/Down, filling missing with 0 counts
-# Convert chromosome_name to a factor with the specified order first
+# The chromosome_name factor is already set correctly from the previous steps
 all_counts <- all_counts %>%
-  mutate(chromosome_name = factor(chromosome_name, levels = levels(chromosome_order))) %>%
   complete(chromosome_name, regulation, fill = list(count = 0)) %>%
+  # Factor levels might be lost after complete, re-apply if needed, although levels should be preserved here
+  mutate(chromosome_name = factor(chromosome_name, levels = levels(chromosome_order))) %>%
   filter(!is.na(regulation)) # Remove any rows created with NA regulation (shouldn't happen here)
+
 
 # --- 6. Create Chromosome Distribution Plot ---
 message("Creating the chromosome distribution plot...")
 
 # Find the maximum absolute count for symmetrical y-axis scaling
 max_abs_count <- max(abs(all_counts$count), na.rm = TRUE)
-y_limit <- ceiling(max_abs_count * 1.1) # Add 10% padding
+# Handle case where there might be no counts at all
+y_limit <- if (max_abs_count > 0) ceiling(max_abs_count * 1.1) else 1 # Add 10% padding, minimum limit 1
 
 # Create the plot using ggplot2
 chromosome_plot <- ggplot(all_counts, aes(x = chromosome_name, y = count, fill = regulation)) +
@@ -138,21 +196,14 @@ chromosome_plot <- ggplot(all_counts, aes(x = chromosome_name, y = count, fill =
 # --- 7. Export the Plot ---
 message("Exporting the plot to: ", output_plot_file)
 
-# Create output directory if it doesn't exist
-output_dir <- dirname(output_plot_file)
-if (!dir.exists(output_dir)) {
-  dir.create(output_dir, recursive = TRUE)
-  message("Created output directory: ", output_dir)
-}
-
-# Save the plot as JPEG
+# Save the plot as JPEG (Directory was already created earlier)
 ggsave(
   filename = output_plot_file,
   plot = chromosome_plot,
   device = "jpeg",
-  width = 8,    # Inches
-  height = 5,   # Inches
-  dpi = 300     # Resolution
+  width = 8,     # Inches
+  height = 5,    # Inches
+  dpi = 300      # Resolution
 )
 
 message("Script finished successfully.")
