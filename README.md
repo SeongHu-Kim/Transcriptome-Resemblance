@@ -110,6 +110,16 @@
 
 **Output**: volcano_plot.jpg
 
+### **[Optional] Step 4B**
+
+**Filename**: Chromosome_Distribution__Plot.R
+
+**Purpose**: Create a chromosome distribution plot based on the DESeq2 results
+
+**Input**: UpDEG.csv, DownDEG.csv from step 3
+
+**Output**: chromosome_distribution_plot.jpg
+
 ### **Step 5**
 
 **Filename**: Public_Dataset_to_CountsMatrix.R
